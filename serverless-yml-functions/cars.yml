@@ -1,0 +1,8 @@
+createCar:
+  handler: cars/create.handler
+  events:
+    - httpApi:
+        path: /cars
+        method: post
+        authorizer:
+          name: tokenAuthorizer
