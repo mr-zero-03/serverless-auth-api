@@ -1,0 +1,18 @@
+authorizer:
+  handler: auth/authorizer.handler
+
+login:
+  handler: auth/login.handler
+  events:
+    - httpApi:
+        path: /users/login
+        method: post
+
+logout:
+  handler: auth/logout.handler
+  events:
+    - httpApi:
+        path: /users/logout
+        method: post
+        authorizer:
+          name: tokenAuthorizer

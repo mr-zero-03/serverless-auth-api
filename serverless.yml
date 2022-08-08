@@ -38,24 +38,7 @@ provider:
         enableSimpleResponses: true
 
 functions:
-  authorizer:
-    handler: authorizer.handler
-
-  login:
-    handler: login.handler
-    events:
-      - httpApi:
-          path: /users/login
-          method: post
-
-  logout:
-    handler: logout.handler
-    events:
-      - httpApi:
-          path: /users/logout
-          method: post
-          authorizer:
-            name: tokenAuthorizer
+  - ${file(./serverless-yml-functions/auth.yml)}
 
 resources:
   Resources:
