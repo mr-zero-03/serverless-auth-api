@@ -29,8 +29,18 @@ provider:
         - "dynamodb:Scan*"
         - "dynamodb:UpdateItem"
         - "dynamodb:DeleteItem"
+  httpApi:
+    authorizers:
+      tokenAuthorizer:
+        functionName: authorizer
+        type: request
+        identitySource: $request.header.Authorization
+        enableSimpleResponses: true
 
 functions:
+  authorizer:
+    handler: authorizer.handler
+
   login:
     handler: login.handler
     events:
