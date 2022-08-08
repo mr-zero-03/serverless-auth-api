@@ -48,6 +48,15 @@ functions:
           path: /users/login
           method: post
 
+  logout:
+    handler: logout.handler
+    events:
+      - httpApi:
+          path: /users/logout
+          method: post
+          authorizer:
+            name: tokenAuthorizer
+
 resources:
   Resources:
 
