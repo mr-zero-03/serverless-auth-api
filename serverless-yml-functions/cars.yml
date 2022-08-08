@@ -6,3 +6,21 @@ createCar:
         method: post
         authorizer:
           name: tokenAuthorizer
+
+readCars:
+  handler: cars/read.handler
+  events:
+    - httpApi:
+        path: /cars
+        method: get
+        authorizer:
+          name: tokenAuthorizer
+
+readCar:
+  handler: cars/read.handler
+  events:
+    - httpApi:
+        path: /cars/{id}
+        method: get
+        authorizer:
+          name: tokenAuthorizer
