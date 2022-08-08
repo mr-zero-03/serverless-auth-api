@@ -7,8 +7,8 @@ createCar:
         authorizer:
           name: tokenAuthorizer
 
-readCars:
-  handler: cars/read.handler
+listCars:
+  handler: cars/list.handler
   events:
     - httpApi:
         path: /cars
@@ -16,8 +16,8 @@ readCars:
         authorizer:
           name: tokenAuthorizer
 
-readCar:
-  handler: cars/read.handler
+showCar:
+  handler: cars/show.handler
   events:
     - httpApi:
         path: /cars/{id}

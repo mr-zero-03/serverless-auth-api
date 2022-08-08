@@ -4,48 +4,50 @@ const TABLENAME = process.env.DYNAMODB_CARS_TABLE;
 const dynamo = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = async ( event ) => {
-
-  console.log( 'event' );
-  console.log( event );
-
-  let body;
-  let statusCode = 200;
-  const headers = {
+  const response = {
     'Content-Type': 'application/json'
   };
 
+  let body = {};
   try {
-    switch( event.routeKey ) {
-
-      case "POST /cars":
-        let requestJSON = JSON.parse( event.body );
-        await dynamo.put( {
-          TableName: TABLENAME,
-          Item: {
-            id: requestJSON.id,
-            name: requestJSON.name,
-            brand: requestJSON.brand,
-            color: requestJSON.color,
-            price: requestJSON.price,
-            active: requestJSON.active
-          }
-        } ).promise();
-        body = `Put item ${requestJSON.id}`;
-      break;
-
-      default:
-        throw new Error( `Unsupported route: "${event.routeKey}"` );
+    if ( event.body ) {
+      body = JSON.parse( event.body );
     }
-  } catch (err) {
-    statusCode = 400;
-    body = err.message;
-  } finally {
-    body = JSON.stringify( body );
+  } catch( err ) {
+    response.statusCode = 400;
+    response.body = JSON.stringify( {
+      message: 'The received data is not correct, please check it'
+    } );
+
+    return( response );
   }
 
-  return {
-    statusCode,
-    body,
-    headers
-  };
+  try {
+    await dynamo.put( {
+      TableName: TABLENAME,
+      Item: {
+        id: body.id,
+        name: body.name,
+        brand: body.brand,
+        color: body.color,
+        price: body.price,
+        active: body.active
+      }
+    } ).promise();
+
+    response.statusCode = 201;
+    response.body = JSON.stringify( {
+      message: 'The car was created correctly!'
+    } );
+  } catch( err ) {
+    console.error( 'Error trying to save the data' );
+    console.error( err );
+
+    response.statusCode = 500;
+    response.body = JSON.stringify( {
+      message: 'Error trying to save the data'
+    } );
+  }
+
+  return( response );
 };

@@ -8,10 +8,10 @@ exports.handler = async ( event ) => {
     'Content-Type': 'application/json'
   };
 
-  const id = event.pathParameters.id
+  const id = event.pathParameters.id;
 
   try {
-    await dynamo.delete( {
+    const car = await dynamo.get( {
       TableName: TABLENAME,
       Key: {
         id: id
@@ -19,16 +19,14 @@ exports.handler = async ( event ) => {
     } ).promise();
 
     response.statusCode = 200;
-    response.body = JSON.stringify( {
-      message: 'The car with the id: "' + id + '" was deleted correctly'
-    } );
+    response.body = JSON.stringify( car.Item );
   } catch( err ) {
-    console.error( 'Error trying to delete the car with the id: "' + id + '"' );
+    console.error( 'Error trying to get the car with the id: "' + id + '"' );
     console.error( err );
 
-    response.statusCode = 500;
+    response.statusCode = 400;
     response.body = JSON.stringify( {
-      message: 'Error trying to delete the car with the id: "' + id + '"'
+      message: 'Error trying to get the car with the id "' + id + '" data'
     } );
   }
 
