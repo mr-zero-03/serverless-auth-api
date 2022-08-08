@@ -24,3 +24,12 @@ readCar:
         method: get
         authorizer:
           name: tokenAuthorizer
+
+deleteCar:
+  handler: cars/delete.handler
+  events:
+    - httpApi:
+        path: /cars/{id}
+        method: delete
+        authorizer:
+          name: tokenAuthorizer
